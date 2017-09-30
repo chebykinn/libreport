@@ -1,0 +1,9 @@
+---
+documentclass: article
+lang: ru
+fontsize: 12pt
+mainfont: "Liberation Serif"
+sansfont: "Liberation Sans"
+monofont: "DejaVu Sans Mono"
+geometry: margin=2cm
+---

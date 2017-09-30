@@ -1,0 +1,29 @@
+% libreport 0.1 by Ivan Chebykin <ivan@chebykin.org>
+
+\usepackage{caption}
+\usepackage{verbatim}
+\usepackage[dvipsnames]{xcolor}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C] {\thepage}
+
+% Variables to determine if there is multiple authors
+$if(author)$
+\newif\ifisauthorone
+\newif\ifisauthormany
+\isauthoronefalse
+\isauthormanyfalse
+$for(author)$
+\ifisauthorone
+\isauthormanytrue
+\else
+\isauthoronetrue
+\fi
+$endfor$
+$endif$
+
+% Fix for russian fonts
+\newfontfamily{\cyrillicfonttt}{$monofont$}
+\newfontfamily{\cyrillicfont}{$mainfont$}

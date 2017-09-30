@@ -1,0 +1,51 @@
+% Title
+\begin{titlepage}
+	\begin{center}
+		\large
+		$if(university)$$university$$endif$
+
+		\vspace{0.25cm}
+
+		$if(faculty)$$faculty$$endif$
+
+		$if(department)$$department$$endif$
+		\vfill
+
+		\textsc{$if(type)$$type$$endif$ $if(number)$ № $number$ $endif$ по дисциплине \\$if(subject)$"$subject$"$endif$ $if(name)$\small \\ $name$$endif$}
+
+		\bigskip
+	\end{center}
+	\vfill
+	\vfill
+
+	\begin{flushright}
+	$if(author)$
+	\ifisauthormany
+	Выполнили:
+	\else
+	Выполнил:
+	\fi
+
+	$for(author)$
+	$author$ \\
+	$endfor$
+	$endif$
+
+	\vspace{0.25cm}
+	$if(group)$
+	Группа: $group$
+	$endif$
+
+	\vspace{0.25cm}
+	$if(inspector)$
+	Проверяющий: $inspector$
+	$endif$
+	\end{flushright}
+	\vfill
+
+	\begin{center}
+	$if(city)$$city$$endif$, \the\year
+	\end{center}
+\end{titlepage}
+
+\newpage
