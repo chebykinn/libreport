@@ -2,7 +2,6 @@
 
 \usepackage{caption}
 \usepackage{verbatim}
-\usepackage[dvipsnames]{xcolor}
 
 \usepackage{fancyhdr}
 \pagestyle{fancy}

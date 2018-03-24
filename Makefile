@@ -1,4 +1,9 @@
-# libreport 0.1 by Ivan Chebykin <ivan@chebykin.org>
+# libreport 0.2 by Ivan Chebykin <ivan@chebykin.org>
+
+LOCAL_HEADERS?=
+LOCAL_TEMPLATES?=
+LOCAL_METADATA?=
+LOCAL_FLAGS?=
 
 INCLUDE_DIR?=assets
 SRCDIR?=.
@@ -7,18 +12,21 @@ SRCEXT?=md
 FORMAT?=pdf
 
 PANDOC?=pandoc
-PANDOC_FLAGS?=-s --latex-engine=xelatex
+PANDOC_FLAGS?=-s --pdf-engine=xelatex $(LOCAL_FLAGS)
+
+VIEWER_pdf?=evince
+VIEWER_FLAGS_pdf?=
 
 # Internal variables
 SOURCES?=$(wildcard $(SRCDIR)/*.$(SRCEXT))
 DOCS?=$(patsubst $(SRCDIR)/%,$(FORMAT)/%,$(SOURCES:.$(SRCEXT)=.$(FORMAT)))
 
-METADATA?=$(wildcard $(INCLUDE_DIR)/*.yaml)
+METADATA?=$(LOCAL_METADATA) $(wildcard $(INCLUDE_DIR)/*.yaml)
 
-HEADERS?=$(wildcard $(INCLUDE_DIR)/*.def)
+HEADERS?=$(LOCAL_HEADERS) $(wildcard $(INCLUDE_DIR)/*.def)
 HEADERS_OUT=$(HEADERS:.def=.def.out)
 
-TEMPLATES?=$(wildcard $(INCLUDE_DIR)/*.tex)
+TEMPLATES?=$(LOCAL_TEMPLATES) $(wildcard $(INCLUDE_DIR)/*.tex)
 TEMPLATES_OUT=$(TEMPLATES:.tex=.tex.out)
 
 SPACE=
@@ -36,14 +44,20 @@ all: $(HEADERS_OUT) $(TEMPLATES_OUT) $(DOCS)
 	@rm -f $(HEADERS_OUT)
 
 $(INCLUDE_DIR)/%.def.out: $(INCLUDE_DIR)/%.def
-	TEXINPUTS=:$(TEXINPUTS):$(INCLUDE_DIR) $(PANDOC) $(PANDOC_FLAGS) --template=$< $(METADATA) $(SOURCES) -o $@
+	TEXINPUTS=:$(TEXINPUTS):$(INCLUDE_DIR) $(PANDOC) $(PANDOC_FLAGS)  \
+	--template=$< $(SOURCES) $(METADATA) -V pagetitle=tmp -o $@
 
 $(INCLUDE_DIR)/%.tex.out: $(INCLUDE_DIR)/%.tex
-	TEXINPUTS=:$(TEXINPUTS):$(INCLUDE_DIR) $(PANDOC) $(PANDOC_FLAGS) --template=$< $(METADATA) $(SOURCES) -o $@
+	TEXINPUTS=:$(TEXINPUTS):$(INCLUDE_DIR) $(PANDOC) $(PANDOC_FLAGS)  \
+	--template=$< $(SOURCES) $(METADATA) -V pagetitle=tmp -o $@
 
 $(FORMAT)/%.$(FORMAT): $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(FORMAT)
 	TEXINPUTS=:$(TEXINPUTS):$(INCLUDE_DIR) $(PANDOC) $(PANDOC_RFLAGS) $< $(METADATA) -o $@
+
+run:
+	$(VIEWER_pdf) $(VIEWER_FLAGS_pdf) $(FORMAT)/*.$(FORMAT)
+
 
 clean:
 	rm -rf $(FORMAT)
