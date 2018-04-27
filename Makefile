@@ -39,15 +39,17 @@ PANDOC_RFLAGS=$(PANDOC_FLAGS)
 PANDOC_RFLAGS+=$(HEADERS_FLAGS)
 PANDOC_RFLAGS+=$(TEMPLATES_FLAGS)
 
-all: $(HEADERS_OUT) $(TEMPLATES_OUT) $(DOCS)
+all: $(DOCS)
 	@rm -f $(TEMPLATES_OUT)
 	@rm -f $(HEADERS_OUT)
 
-$(INCLUDE_DIR)/%.def.out: $(INCLUDE_DIR)/%.def
+$(DOCS): $(HEADERS_OUT) $(TEMPLATES_OUT)
+
+%.def.out: %.def
 	TEXINPUTS=:$(TEXINPUTS):$(INCLUDE_DIR) $(PANDOC) $(PANDOC_FLAGS)  \
 	--template=$< $(SOURCES) $(METADATA) -V pagetitle=tmp -o $@
 
-$(INCLUDE_DIR)/%.tex.out: $(INCLUDE_DIR)/%.tex
+%.tex.out: %.tex
 	TEXINPUTS=:$(TEXINPUTS):$(INCLUDE_DIR) $(PANDOC) $(PANDOC_FLAGS)  \
 	--template=$< $(SOURCES) $(METADATA) -V pagetitle=tmp -o $@
 
